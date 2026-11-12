@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Free Voronoi — volumetric Voronoi lattices from STL &amp; STEP</title>
+  <meta name="description" content="Free, in-browser tool that turns any STL or STEP model into a true volumetric Voronoi lattice. Nothing is uploaded." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2315171c'/%3E%3Cpath d='M16 5l9 5v11l-9 6-9-6V10z M16 5v9m0 0l9 7m-9-7l-9 7' fill='none' stroke='%23ff9d2e' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><path d="M16 4l10 5.5v12L16 28 6 21.500V9.500z M16 4v10m0 0l10 7.500M16 14L6 21.500" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>
+      <span>free<b>voronoi</b></span>
+    </div>
+    <p class="tagline">Volumetric Voronoi lattices from STL &amp; STEP — free, runs in your browser, nothing uploaded.</p>
+    <a class="gh" href="https://github.com/bji219/free-voronoi" target="_blank" rel="noopener">GitHub</a>
+  </header>
+
+  <main>
+    <aside id="panel">
+      <section>
+        <h2>1 · Model</h2>
+        <button id="pick" class="drop">
+          <strong>Drop STL / STEP here</strong>
+          <span>or click to browse</span>
+        </button>
+        <input id="file" type="file" accept=".stl,.step,.stp" hidden />
+        <div class="row demo">
+          <span>Demo</span>
+          <div class="seg" id="demo">
+            <button data-v="sphere">Sphere</button>
+            <button data-v="cube">Cube</button>
+            <button data-v="torus">Torus</button>
+            <button data-v="knot">Knot</button>
+          </div>
+        </div>
+        <p id="modelInfo" class="hint">No model loaded.</p>
+      </section>
+
+      <section>
+        <h2>2 · Pattern</h2>
+        <div class="row">
+          <span>Mode</span>
+          <div class="seg" id="mode">
+            <button data-v="both" class="on" title="Internal strands plus a matching surface web">Volume + skin</button>
+            <button data-v="volume" title="Internal strands only">Volume</button>
+            <button data-v="surface" title="Hollow surface web only">Skin</button>
+          </div>
+        </div>
+        <label class="ctl" data-p="pore"><span>Pore size <i>cell spacing</i></span><input type="number" /><em>mm</em><input type="range" /></label>
+        <div class="row">
+          <span>Random seed</span>
+          <div class="seedbox"><input id="seed" type="number" value="1" min="0" step="1" /><button id="dice" title="Reroll">⟳</button></div>
+        </div>
+      </section>
+
+      <section>
+        <h2>3 · Strands</h2>
+        <label class="ctl" data-p="strandInt"><span>Internal strand Ø</span><input type="number" /><em>mm</em><input type="range" /></label>
+        <label class="ctl" data-p="strandSurf"><span>Skin strand Ø</span><input type="number" /><em>mm</em><input type="range" /></label>
+        <label class="ctl" data-p="blend"><span>Junction blend <i>fillet</i></span><input type="number" /><em>mm</em><input type="range" /></label>
+      </section>
+
+      <section>
+        <h2>4 · Quality</h2>
+        <label class="ctl" data-p="res"><span>Resolution <i>voxels on long axis</i></span><input type="number" /><em></em><input type="range" /></label>
+        <label class="ctl" data-p="smooth"><span>Mesh smoothing <i>passes</i></span><input type="number" /><em></em><input type="range" /></label>
+        <p id="warn" class="warn" hidden></p>
+      </section>
+
+      <section>
+        <h2>View</h2>
+        <div class="row">
+          <span>Section cut</span>
+          <div class="seg" id="cutAxis">
+            <button data-v="0" class="on">X</button><button data-v="1">Y</button><button data-v="2">Z</button>
+          </div>
+        </div>
+        <input id="cut" class="solo" type="range" min="0" max="100" value="100" />
+        <label class="check"><input id="ghost" type="checkbox" /> Show original as ghost</label>
+        <label class="check"><input id="auto" type="checkbox" checked /> Auto-update on change</label>
+      </section>
+
+      <section class="actions">
+        <button id="generate" class="btn ghostbtn" disabled>Generate</button>
+        <button id="export" class="btn primary" disabled>Export STL</button>
+        <dl id="stats"></dl>
+      </section>
+    </aside>
+
+    <div id="stage">
+      <canvas id="view"></canvas>
+      <div id="empty">
+        <h1>Make a Voronoi version of anything.</h1>
+        <p>Drop an STL or STEP file, or pick a demo shape on the left.<br />Strands run through the whole volume and meet the skin pattern node-for-node.</p>
+      </div>
+      <div id="progress" hidden><div id="bar"></div><span id="stageLabel"></span></div>
+      <div id="toast" hidden></div>
+      <div class="nav">Drag rotate · Right-drag pan · Scroll zoom</div>
+    </div>
+  </main>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

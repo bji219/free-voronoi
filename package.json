@@ -1,0 +1,31 @@
+{
+  "name": "free-voronoi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/core.test.mjs",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bji219/free-voronoi.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bji219/free-voronoi/issues"
+  },
+  "homepage": "https://github.com/bji219/free-voronoi#readme",
+  "dependencies": {
+    "occt-import-js": "^0.0.23",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "vite": "^8.3.8"
+  },
+  "type": "module"
+}
