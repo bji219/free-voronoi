@@ -24,9 +24,9 @@
         <h2>1 · Model</h2>
         <button id="pick" class="drop">
           <strong>Drop STL / STEP here</strong>
-          <span>or click to browse</span>
+          <span>or click to browse · drop a saved .json project to restore its settings</span>
         </button>
-        <input id="file" type="file" accept=".stl,.step,.stp" hidden />
+        <input id="file" type="file" accept=".stl,.step,.stp,.json" hidden />
         <div class="row demo">
           <span>Demo</span>
           <div class="seg" id="demo">
@@ -36,7 +36,22 @@
             <button data-v="knot">Knot</button>
           </div>
         </div>
-        <p id="modelInfo" class="hint">No model loaded.</p>
+        <div class="row"><p id="modelInfo" class="hint" style="margin:0">No model loaded.</p><button id="saveProj" class="mini" title="Download every setting, keep cylinder and the orientation for this file as a small .json you can drop back in later" disabled>Save project</button></div>
+        <div id="orient" class="off">
+          <div class="row"><span>Orientation <i class="dimnote">Z is up on the bed</i></span><button id="layFlat" class="mini" title="Click a face in the view and the part rolls until that face lies flat on the bed">Lay face flat</button></div>
+          <div class="row rot">
+            <span>Rotate 90°</span>
+            <div class="seg">
+              <button data-a="0" data-d="-1" title="−90° about X">X−</button><button data-a="0" data-d="1" title="+90° about X">X+</button>
+              <button data-a="1" data-d="-1" title="−90° about Y">Y−</button><button data-a="1" data-d="1" title="+90° about Y">Y+</button>
+              <button data-a="2" data-d="-1" title="−90° about Z">Z−</button><button data-a="2" data-d="1" title="+90° about Z">Z+</button>
+            </div>
+          </div>
+          <div class="row">
+            <span>Angles ° <i class="dimnote">X · Y · Z</i></span>
+            <div class="xyz euler"><input data-e="0" type="number" step="1" /><input data-e="1" type="number" step="1" /><input data-e="2" type="number" step="1" /><button id="orientReset" class="mini" title="Back to the orientation in the file">Reset</button></div>
+          </div>
+        </div>
       </section>
 
       <section>
@@ -49,7 +64,19 @@
             <button data-v="surface" title="Hollow surface web only">Skin</button>
           </div>
         </div>
-        <label class="ctl" data-p="pore"><span>Pore size <i>cell spacing</i></span><input type="number" /><em>mm</em><input type="range" /></label>
+        <div class="row shape">
+          <span>Cell shape</span>
+          <div class="seg wrap" id="shape">
+            <button data-v="random" class="on" title="Poisson-disk foam: organic, no two cells alike">Random</button>
+            <button data-v="cubic" title="Simple cubic lattice: box-like cells">Cubic</button>
+            <button data-v="kelvin" title="Body-centred cubic: truncated octahedra, the classic foam cell">Kelvin</button>
+            <button data-v="rhombic" title="Face-centred cubic: rhombic dodecahedra">Rhombic</button>
+            <button data-v="honeycomb" title="Hexagonal prisms along Z — best for FDM">Honeycomb</button>
+            <button data-v="radial" title="Rings about the Z axis (or the first keep cylinder's axis): spoke-like cells">Radial</button>
+          </div>
+        </div>
+        <label class="ctl" data-p="jitter" id="jitterCtl"><span>Jitter <i>0 = perfect lattice</i></span><input type="number" /><em></em><input type="range" /></label>
+        <label class="ctl" data-p="pore"><span>Pore size <i>nearest-seed distance</i></span><input type="number" /><em>mm</em><input type="range" /></label>
         <div class="row">
           <span>Random seed</span>
           <div class="seedbox"><input id="seed" type="number" value="1" min="0" step="1" /><button id="dice" title="Reroll">⟳</button></div>
@@ -68,6 +95,31 @@
         <label class="ctl" data-p="res"><span>Resolution <i>voxels on long axis</i></span><input type="number" /><em></em><input type="range" /></label>
         <label class="ctl" data-p="smooth"><span>Mesh smoothing <i>passes</i></span><input type="number" /><em></em><input type="range" /></label>
         <p id="warn" class="warn" hidden></p>
+      </section>
+
+      <section>
+        <h2>5 · Keep solid</h2>
+        <label class="ctl" data-p="shell"><span>Solid shell <i>inward from every surface</i></span><input type="number" /><em>mm</em><input type="range" /></label>
+        <div class="row" style="margin-top:14px"><span>Keep cylinders <i class="dimnote">bores &amp; bosses</i></span><button id="addKeep" class="mini">+ Add</button></div>
+        <div id="keeps"></div>
+        <p class="hint">A cylinder with a wall keeps a liner around a bore; wall 0 keeps a solid boss. Set Ø, press <b>Pick</b>, then click that face in the view — the centre snaps onto the axis.</p>
+      </section>
+
+      <section>
+        <h2>6 · Printing</h2>
+        <div class="row">
+          <span>Printer</span>
+          <div class="seg" id="printer">
+            <button data-v="raw" class="on" title="Leave the lattice as generated (resin, SLS, or you add supports)">Raw</button>
+            <button data-v="fdm" title="Taller cells plus vertical pins under floating islands, so every layer has something under it">FDM-ready</button>
+          </div>
+        </div>
+        <div id="fdmCtls">
+          <label class="ctl" data-p="stretch"><span>Cell stretch <i>taller cells along Z</i></span><input type="number" /><em>×</em><input type="range" /></label>
+          <label class="check"><input id="pin" type="checkbox" checked /> Pin floating islands down to the strand below</label>
+        </div>
+        <label class="check"><input id="showIslands" type="checkbox" checked /> Highlight floating islands in red</label>
+        <p id="islandInfo" class="hint"></p>
       </section>
 
       <section>

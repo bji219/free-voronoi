@@ -55,7 +55,7 @@ self.onmessage = async (e) => {
       };
       const r = await gen.run(msg.params, tick);
       if (!r || id !== latest) return;
-      self.postMessage({ type: 'result', id: msg.id, ...r }, [r.positions.buffer, r.indices.buffer]);
+      self.postMessage({ type: 'result', id: msg.id, ...r }, [r.positions.buffer, r.indices.buffer, r.islands.buffer]);
     }
   } catch (err) {
     self.postMessage({ type: 'error', id: msg.id, message: err?.message || String(err) });
