@@ -37,25 +37,31 @@
           </div>
         </div>
         <div class="row"><p id="modelInfo" class="hint" style="margin:0">No model loaded.</p><button id="saveProj" class="mini" title="Download every setting, keep cylinder and the orientation for this file as a small .json you can drop back in later" disabled>Save project</button></div>
-        <div id="orient" class="off">
-          <div class="row"><span>Orientation <i class="dimnote">Z is up on the bed</i></span><button id="layFlat" class="mini" title="Click a face in the view and the part rolls until that face lies flat on the bed">Lay face flat</button></div>
-          <div class="row rot">
-            <span>Rotate 90°</span>
-            <div class="seg">
-              <button data-a="0" data-d="-1" title="−90° about X">X−</button><button data-a="0" data-d="1" title="+90° about X">X+</button>
-              <button data-a="1" data-d="-1" title="−90° about Y">Y−</button><button data-a="1" data-d="1" title="+90° about Y">Y+</button>
-              <button data-a="2" data-d="-1" title="−90° about Z">Z−</button><button data-a="2" data-d="1" title="+90° about Z">Z+</button>
-            </div>
-          </div>
-          <div class="row">
-            <span>Angles ° <i class="dimnote">X · Y · Z</i></span>
-            <div class="xyz euler"><input data-e="0" type="number" step="1" /><input data-e="1" type="number" step="1" /><input data-e="2" type="number" step="1" /><button id="orientReset" class="mini" title="Back to the orientation in the file">Reset</button></div>
-          </div>
+      </section>
+
+      <section id="orient" class="off">
+        <h2>2 · Orient</h2>
+        <div class="ogrid">
+          <span></span><b>X</b><b>Y</b><b>Z</b>
+          <span>Rotate 90°</span>
+          <div class="seg pm rot"><button data-a="0" data-d="-1" title="−90° about X">−</button><button data-a="0" data-d="1" title="+90° about X">+</button></div>
+          <div class="seg pm rot"><button data-a="1" data-d="-1" title="−90° about Y">−</button><button data-a="1" data-d="1" title="+90° about Y">+</button></div>
+          <div class="seg pm rot"><button data-a="2" data-d="-1" title="−90° about Z">−</button><button data-a="2" data-d="1" title="+90° about Z">+</button></div>
+          <span>Angle</span>
+          <label class="deg"><input data-e="0" type="number" step="1" title="Rotation about X, degrees" /><em>°</em></label>
+          <label class="deg"><input data-e="1" type="number" step="1" title="Rotation about Y, degrees" /><em>°</em></label>
+          <label class="deg"><input data-e="2" type="number" step="1" title="Rotation about Z, degrees" /><em>°</em></label>
         </div>
+        <div class="oacts">
+          <button id="layFlat" class="mini" title="Click a face in the view and the part rolls until that face lies flat on the bed">Lay face flat</button>
+          <button id="orientReset" class="mini" title="Back to the orientation in the file">Reset</button>
+        </div>
+        <p class="hint onnote">Z is up on the bed. <b>Lay face flat</b>, then click the face that should sit on the bed.</p>
+        <p class="hint offnote">Load a model to orient it.</p>
       </section>
 
       <section>
-        <h2>2 · Pattern</h2>
+        <h2>3 · Pattern</h2>
         <div class="row">
           <span>Mode</span>
           <div class="seg" id="mode">
@@ -84,21 +90,21 @@
       </section>
 
       <section>
-        <h2>3 · Strands</h2>
+        <h2>4 · Strands</h2>
         <label class="ctl" data-p="strandInt"><span>Internal strand Ø</span><input type="number" /><em>mm</em><input type="range" /></label>
         <label class="ctl" data-p="strandSurf"><span>Skin strand Ø</span><input type="number" /><em>mm</em><input type="range" /></label>
         <label class="ctl" data-p="blend"><span>Junction blend <i>fillet</i></span><input type="number" /><em>mm</em><input type="range" /></label>
       </section>
 
       <section>
-        <h2>4 · Quality</h2>
+        <h2>5 · Quality</h2>
         <label class="ctl" data-p="res"><span>Resolution <i>voxels on long axis</i></span><input type="number" /><em></em><input type="range" /></label>
         <label class="ctl" data-p="smooth"><span>Mesh smoothing <i>passes</i></span><input type="number" /><em></em><input type="range" /></label>
         <p id="warn" class="warn" hidden></p>
       </section>
 
       <section>
-        <h2>5 · Keep solid</h2>
+        <h2>6 · Keep solid</h2>
         <label class="ctl" data-p="shell"><span>Solid shell <i>inward from every surface</i></span><input type="number" /><em>mm</em><input type="range" /></label>
         <div class="row" style="margin-top:14px"><span>Keep cylinders <i class="dimnote">bores &amp; bosses</i></span><button id="addKeep" class="mini">+ Add</button></div>
         <div id="keeps"></div>
@@ -106,7 +112,7 @@
       </section>
 
       <section>
-        <h2>6 · Printing</h2>
+        <h2>7 · Printing</h2>
         <div class="row">
           <span>Printer</span>
           <div class="seg" id="printer">

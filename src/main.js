@@ -141,7 +141,7 @@ function seg(id, cb) {
 }
 seg('#mode', (v) => { params.mode = v; changed(); });
 seg('#shape', (v) => { params.shape = v; syncShape(); persist(); changed(); });
-function syncShape() { $('#jitterCtl').classList.toggle('off', params.shape === 'random'); }
+function syncShape() { $('#jitterCtl').classList.toggle('gone', params.shape === 'random'); } // jitter only applies to lattice shapes
 function setSeg(id, v) { for (const b of $(id).children) b.classList.toggle('on', b.dataset.v === v); }
 syncShape();
 seg('#demo', (v) => loadDemo(v));
@@ -298,14 +298,14 @@ function setLaying(v) {
 }
 function syncEuler() {
   const e = qToEuler(orient);
-  document.querySelectorAll('#orient .euler input').forEach((i, k) => { i.value = Math.round(e[k] * 10) / 10; });
+  document.querySelectorAll('#orient input[data-e]').forEach((i, k) => { i.value = Math.round(e[k] * 10) / 10; });
 }
-$('#orient .rot .seg').addEventListener('click', (e) => {
-  const b = e.target.closest('button'); if (!b) return;
+$('#orient .ogrid').addEventListener('click', (e) => {
+  const b = e.target.closest('.rot button'); if (!b) return;
   setOrient(qMul(qAxisAngle(+b.dataset.a, +b.dataset.d * Math.PI / 2), orient));
 });
-document.querySelectorAll('#orient .euler input').forEach((inp) => inp.addEventListener('change', () => {
-  const e = [...document.querySelectorAll('#orient .euler input')].map((i) => parseFloat(i.value) || 0);
+document.querySelectorAll('#orient input[data-e]').forEach((inp) => inp.addEventListener('change', () => {
+  const e = [...document.querySelectorAll('#orient input[data-e]')].map((i) => parseFloat(i.value) || 0);
   setOrient(qFromEuler(e));
 }));
 $('#orientReset').addEventListener('click', () => setOrient(qIdentity()));
