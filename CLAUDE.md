@@ -1,7 +1,7 @@
 # free-voronoi
 
 Browser tool: imports STL/STEP, outputs a **volumetric** Voronoi lattice as binary STL. Internal strands meet the surface web node-for-node. Everything runs client-side in a Web Worker; nothing is uploaded.
-Remote: github.com/bji219/free-voronoi (private). Deployed by `.github/workflows/pages.yml` on push to `main`.
+Remote: github.com/bji219/free-voronoi (public). Live at https://bji219.github.io/free-voronoi/, deployed by `.github/workflows/pages.yml` on every push to `main`.
 
 ## Commands
 
@@ -47,6 +47,7 @@ No linter or TypeScript. Plain ES modules, `"type": "module"`. Stack: Vite 8, th
 - Per-file settings are stored in `localStorage` under `fv:part:<filename>` as a versioned project: `{app:'free-voronoi', v:1, file, params, keeps, printer, pin, orient}`. First entries were flat; `restore()` accepts both.
 - **Save project** downloads the same JSON as `<name>.voronoi.json` (about 400 bytes, no geometry). Dropping it before the model stores it for that file name; after, it applies immediately.
 - Keep cylinders: `{axis 0|1|2, d, wall, len, c:[x,y,z]}`. `wall>0` keeps a bore liner, `wall 0` a solid boss. Radial cell shape follows the first valid keep's axis and centre.
+- **Phones (≤760px)**: the document scrolls; `#stage` is `order:-1` + `position:sticky` on top, `.actions` sticky at the bottom, stats live in their own `.statsec`. Never put the panel and stage in a height-capped `column-reverse` flex box (that pushed the viewer off-screen). Number inputs are 16px there so iOS does not zoom on focus. `.touch`/`.mouse` and `.narrow`/`.wide` spans swap wording; `TAP` in main.js does the same for JS strings.
 - While **Lay face flat** or a keep **Pick** is armed, the solid part is shown alone (`updateVisibility`), lattice and islands hidden.
 - Test hooks: `window.__fv` (params, keeps, generate, setShape, setPrinter, setOrient, rotate90, layFlat, project, openProject, viz). `document.body.dataset.ready` holds the id of the last finished job, used for waiting in browser tests.
 - Setting `__fv.params.x` directly does not regenerate. Go through the control (set value, dispatch `change`) or call `changed()` paths.
@@ -55,6 +56,7 @@ No linter or TypeScript. Plain ES modules, `"type": "module"`. Stack: Vite 8, th
 
 `npm test` covers geometry only (watertight, density, keep fields, island detection, shapes, orientation math). UI is verified by hand or Playwright:
 
+- Phone layout: Playwright WebKit with `p.devices["iPhone 13"]` (real Safari engine, touch media queries match). After a Playwright upgrade run `playwright install webkit chromium` from the venv.
 - Playwright Python in a venv, headless chromium with `--use-angle=swiftshader --enable-unsafe-swiftshader --ignore-gpu-blocklist` (no GPU).
 - Serve with the webapp-testing skill's `scripts/with_server.py --server "npx vite --port 5177 --strictPort" --port 5177 -- python <script>`.
 - Real parts: `/Users/BrendanInglis/Documents/Intelligent Design Works Limited/CAD/FreeCad` (binary STLs, 8-120 mm). Main fixture: `01 OP1-SV2 Accessories/Production_STLs/op1_retro_knob_v3-Knob.stl` (17x17x14 mm). Its pot-shaft bore is r=3.10 along Z, z 2.3 to 10.1, counterbore r=3.65 below z 2.3. Good keep-cylinder test: d 6.2, wall 1.2, len 8.2, centre (0,0,6.2).
@@ -71,6 +73,5 @@ No linter or TypeScript. Plain ES modules, `"type": "module"`. Stack: Vite 8, th
 ## Status and open items
 
 - Shipped: shell, keep cylinders with face picking, FDM mode (stretch, island detection, pins), six cell shapes plus jitter, orientation (90 degree nudges, Euler, lay-face-flat), project save/load, solid preview during picking.
-- **GitHub Pages is not enabled**, so the deploy job 404s. Repo is private (Pages on private needs a paid plan): make it public or upgrade, then `gh api -X POST repos/bji219/free-voronoi/pages -f build_type=workflow` and rerun the failed workflow.
 - Much of this work may be uncommitted; check `git status` first. The git repo is this nested folder, not the parent workspace.
 - Ideas not built: keeping selected faces solid by face-picking (only shell + cylinders exist), thin-axis adaptive resolution for plate-like parts, true slicer simulation.

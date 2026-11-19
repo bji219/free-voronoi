@@ -88,13 +88,15 @@ input.solo { margin-bottom: 6px; }
 .check input { accent-color: var(--accent); }
 
 .actions { border-bottom: 0; display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; }
+.statsec { padding-top: 0; border-bottom: 0; }
+.statsec:has(#stats:empty) { display: none; }
 .btn { font: inherit; font-weight: 600; padding: 11px; border-radius: 8px; border: 1px solid var(--line); cursor: pointer; }
 .btn:disabled { opacity: .4; cursor: not-allowed; }
 .primary { background: var(--accent); border-color: var(--accent); color: #1a1205; }
 .primary:not(:disabled):hover { background: var(--accent2); }
 .ghostbtn { background: var(--panel2); color: var(--text); }
 .ghostbtn:not(:disabled):hover { border-color: var(--accent); }
-#stats { grid-column: 1 / -1; margin: 8px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 12px; }
+#stats { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 12px; }
 #stats dt { color: var(--dim); }
 #stats dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
 
@@ -110,13 +112,42 @@ input.solo { margin-bottom: 6px; }
 #progress span { display: block; margin-top: 6px; font-size: 12px; color: var(--dim); }
 #toast { position: absolute; left: 50%; top: 18px; transform: translateX(-50%); background: #2a1512; border: 1px solid var(--danger); color: #ffd4cf; padding: 9px 14px; border-radius: 8px; font-size: 13px; max-width: 80%; }
 
+/* touch vs mouse wording, wide vs narrow wording */
+.touch, .narrow { display: none; }
+@media (hover: none) and (pointer: coarse) {
+  .touch { display: revert; }
+  .mouse { display: none; }
+}
+
+/* Phones: the document scrolls; the 3D view stays pinned on top and the
+   Generate / Export bar stays pinned to the bottom, so the result stays in
+   sight while you work through the controls. */
 @media (max-width: 760px) {
-  body { overflow: auto; }
-  main { flex-direction: column-reverse; }
-  #panel { width: 100%; border-right: 0; overflow: visible; }
-  #stage { height: 55vh; flex: none; }
+  html, body { height: auto; }
+  body { overflow: visible; min-height: 100%; }
+  main { flex: none; flex-direction: column; }
+  #stage { order: -1; position: sticky; top: 0; z-index: 5; flex: none; height: 42vh; height: 42svh; border-bottom: 1px solid var(--line); }
+  #panel { width: 100%; border-right: 0; overflow: visible; padding-bottom: 0; }
   .tagline { display: none; }
   .brand { flex: 1; }
+  section { padding: 14px 16px 16px; }
+  .wide { display: none; }
+  .narrow { display: revert; }
+  #empty h1 { font-size: 20px; margin-bottom: 6px; }
+  #empty p { font-size: 13px; line-height: 1.45; }
+  .nav { right: 10px; bottom: 8px; }
+  /* 16px stops iOS Safari zooming the page whenever a number box is tapped */
+  input[type=number] { font-size: 16px !important; }
+  .seg button { padding: 8px 10px; font-size: 13px; }
+  .ogrid .seg.pm button { padding: 8px 0; }
+  .mini { padding: 7px 11px; font-size: 13px; }
+  .actions { position: sticky; bottom: 0; z-index: 4; background: var(--panel); border-top: 1px solid var(--line); padding: 10px 16px; }
+  .statsec { padding-top: 14px; }
+  #empty[hidden] ~ .nav { display: none; }
+  /* keep-cylinder card: axis + three sizes on one row, Pick / remove on the next */
+  .keep { grid-template-columns: auto repeat(3, minmax(0, 1fr)); }
+  .keep .pick { grid-column: 1 / 4; }
+  .keep .del { grid-column: 4; }
 }
 
 /* keep cylinders */

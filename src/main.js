@@ -46,6 +46,9 @@ scene.add(keepViz);
 let source = null, lattice = null, cap = null, grid = null, islandPts = null;
 let dirty = true;
 
+// phones and tablets get 'Tap' wording on the pick buttons
+const TAP = matchMedia('(hover: none) and (pointer: coarse)').matches ? 'Tap' : 'Click';
+
 function resize() {
   const w = canvas.clientWidth, h = canvas.clientHeight;
   if (canvas.width !== Math.floor(w * renderer.getPixelRatio()) || canvas.height !== Math.floor(h * renderer.getPixelRatio())) {
@@ -179,7 +182,7 @@ function renderKeeps() {
       <label>Ø mm<input type="number" data-f="d" value="${fmt(K.d)}" min="0" step="${DEF.strandInt.step}" /></label>
       <label title="0 = solid boss, >0 = liner around a bore">wall<input type="number" data-f="wall" value="${fmt(K.wall)}" min="0" step="${DEF.strandInt.step}" /></label>
       <label>length<input type="number" data-f="len" value="${fmt(K.len)}" min="0" step="${DEF.strandInt.step}" /></label>
-      <button class="mini pick${n === picking ? ' on' : ''}" title="Click the bore / boss face in the view">${n === picking ? 'Click…' : 'Pick'}</button>
+      <button class="mini pick${n === picking ? ' on' : ''}" title="Click the bore / boss face in the view">${n === picking ? `${TAP}…` : 'Pick'}</button>
       <button class="mini del" title="Remove">✕</button>
       <div class="xyz">${['X', 'Y', 'Z'].map((a, i) => `<label>centre ${a}<input type="number" data-f="c${i}" value="${K.c[i].toFixed(2)}" step="0.1" /></label>`).join('')}</div>
     </div>`).join('');
@@ -232,7 +235,7 @@ canvas.addEventListener('pointerup', (e) => {
   const rect = canvas.getBoundingClientRect();
   ray.setFromCamera(new THREE.Vector2(((e.clientX - rect.left) / rect.width) * 2 - 1, -((e.clientY - rect.top) / rect.height) * 2 + 1), camera);
   const hit = ray.intersectObject(source, false).find((h) => clip.distanceToPoint(h.point) >= 0);
-  if (!hit) { toast('Click on the model surface.'); return; }
+  if (!hit) { toast(`${TAP} on the model surface.`); return; }
   if (laying) { // roll the part so the clicked face points straight down
     const fn = hit.face.normal;
     setLaying(false);
@@ -292,7 +295,7 @@ function setLaying(v) {
   laying = v;
   canvas.classList.toggle('laying', v);
   $('#layFlat').classList.toggle('on', v);
-  $('#layFlat').textContent = v ? 'Click a face…' : 'Lay face flat';
+  $('#layFlat').textContent = v ? `${TAP} a face…` : 'Lay face flat';
   if (v && picking >= 0) { picking = -1; canvas.classList.remove('picking'); renderKeeps(); }
   updateVisibility();
 }

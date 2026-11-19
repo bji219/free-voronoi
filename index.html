@@ -23,8 +23,8 @@
       <section>
         <h2>1 · Model</h2>
         <button id="pick" class="drop">
-          <strong>Drop STL / STEP here</strong>
-          <span>or click to browse · drop a saved .json project to restore its settings</span>
+          <strong class="mouse">Drop STL / STEP here</strong><strong class="touch">Tap to open an STL / STEP file</strong>
+          <span class="mouse">or click to browse · drop a saved .json project to restore its settings</span><span class="touch">or a saved .json project to restore its settings</span>
         </button>
         <input id="file" type="file" accept=".stl,.step,.stp,.json" hidden />
         <div class="row demo">
@@ -53,7 +53,7 @@
           <label class="deg"><input data-e="2" type="number" step="1" title="Rotation about Z, degrees" /><em>°</em></label>
         </div>
         <div class="oacts">
-          <button id="layFlat" class="mini" title="Click a face in the view and the part rolls until that face lies flat on the bed">Lay face flat</button>
+          <button id="layFlat" class="mini" title="Pick a face in the view and the part rolls until that face lies flat on the bed">Lay face flat</button>
           <button id="orientReset" class="mini" title="Back to the orientation in the file">Reset</button>
         </div>
         <p class="hint onnote">Z is up on the bed. <b>Lay face flat</b>, then click the face that should sit on the bed.</p>
@@ -108,7 +108,7 @@
         <label class="ctl" data-p="shell"><span>Solid shell <i>inward from every surface</i></span><input type="number" /><em>mm</em><input type="range" /></label>
         <div class="row" style="margin-top:14px"><span>Keep cylinders <i class="dimnote">bores &amp; bosses</i></span><button id="addKeep" class="mini">+ Add</button></div>
         <div id="keeps"></div>
-        <p class="hint">A cylinder with a wall keeps a liner around a bore; wall 0 keeps a solid boss. Set Ø, press <b>Pick</b>, then click that face in the view — the centre snaps onto the axis.</p>
+        <p class="hint">A cylinder with a wall keeps a liner around a bore; wall 0 keeps a solid boss. Set Ø, press <b>Pick</b>, then <span class="mouse">click</span><span class="touch">tap</span> that face in the view — the centre snaps onto the axis.</p>
       </section>
 
       <section>
@@ -144,19 +144,19 @@
       <section class="actions">
         <button id="generate" class="btn ghostbtn" disabled>Generate</button>
         <button id="export" class="btn primary" disabled>Export STL</button>
-        <dl id="stats"></dl>
       </section>
+      <section class="statsec"><dl id="stats"></dl></section>
     </aside>
 
     <div id="stage">
       <canvas id="view"></canvas>
       <div id="empty">
         <h1>Make a Voronoi version of anything.</h1>
-        <p>Drop an STL or STEP file, or pick a demo shape on the left.<br />Strands run through the whole volume and meet the skin pattern node-for-node.</p>
+        <p>Drop an STL or STEP file, or pick a demo shape <span class="wide">on the left</span><span class="narrow">below</span>.<br />Strands run through the whole volume and meet the skin pattern node-for-node.</p>
       </div>
       <div id="progress" hidden><div id="bar"></div><span id="stageLabel"></span></div>
       <div id="toast" hidden></div>
-      <div class="nav">Drag rotate · Right-drag pan · Scroll zoom</div>
+      <div class="nav"><span class="mouse">Drag rotate · Right-drag pan · Scroll zoom</span><span class="touch">Drag rotate · Pinch zoom · Two-finger pan</span></div>
     </div>
   </main>
   <script type="module" src="./src/main.js"></script>
